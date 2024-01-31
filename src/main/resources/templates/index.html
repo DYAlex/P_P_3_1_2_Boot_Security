@@ -1,11 +1,41 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Spring Security Example</title>
+    <meta charset="UTF-8">
+    <title>Hello Page</title>
 </head>
 <body>
-<h1>Welcome to Index PAGE!</h1>
 
+<div>
+    <h1>Users</h1>
+    <button onclick="window.location.href = '/users/new';">Add new user</button>
+    <br />
+    <br />
+    <table border = 1; style='border-collapse:collapse; width:70%; padding:10px; text-align: center; vertical-align: middle;'>
+        <thead style='background-color: lightblue; color: white; padding: 10px;'>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Lastname</th>
+            <th>Role</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.lastName}"></td>
+                <td th:text="${user.role}"></td>
+                <td>
+                    <a th:href="@{/users/show(id = ${user.id})}">Details</a>
+                    <a th:href="@{/users/edit(id = ${user.id})}">Edit</a>
+                    <a th:href="@{/users/delete(id = ${user.id})}">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create new user</title>
+</head>
+<body>
+<h1>Create new user</h1>
+
+<div><a href="/">Go back</a></div>
+<br/>
+<br/>
+
+<form method="POST" th:action="@{/}" th:object="${user}">
+    <div>
+        <label for="name">Name</label>
+        <input type="text" placeholder="Enter name" id="name" th:field="*{name}"/>
+    </div>
+    <div>
+        <label for="last_name">Last name</label>
+        <input type="text" placeholder="Enter last name" id="last_name" th:field="*{lastName}"/>
+    </div>
+    <div>
+        <label for="role">Role</label>
+        <select id="role" th:field="*{role}">
+            <option value="admin">Admin</option>
+            <option value="tester">Tester</option>
+            <option value="author">Author</option>
+            <option value="reader">Reader</option>
+        </select>
+    </div>
+    <button type="submit">Create</button>
+</form>
+</body>
+</html>
