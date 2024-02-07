@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,12 +10,13 @@ import java.util.Collection;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -29,19 +31,21 @@ public class User implements UserDetails {
 
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "roleId"))
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
+//    @Column(name = "account_non_expired")
     private boolean accountNonExpired;
+
+//    @Column(name = "account_non_locked")
     private boolean accountNonLocked;
+
+//    @Column(name = "credentials_non_expired")
     private boolean credentialsNonExpired;
     private boolean enabled;
-
-    public User() {
-    }
 
     public User(String name, String lastName, String email, String username, String password, Set<Role> roles) {
         this.name = name;
@@ -54,6 +58,14 @@ public class User implements UserDetails {
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = true;
+    }
+
+    public User(String name, String lastName, String email, String username, String password, boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled, Set<Role> roles) {
+        this(name, lastName, email, username, password, roles);
+        this.accountNonExpired = accountNonExpired;
+        this.accountNonLocked = accountNonLocked;
+        this.credentialsNonExpired = credentialsNonExpired;
+        this.enabled = enabled;
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
