@@ -21,17 +21,6 @@ public class UsersController {
         this.roleService = roleService;
     }
 
-    @GetMapping()
-    public String indexPage(Model model, Principal principal) {
-        if (principal != null) {
-            User user = userService.findByUsername(principal.getName());
-            if (user != null) {
-                model.addAttribute("user", user);
-            }
-        }
-        return "index";
-    }
-
     @GetMapping("/user")
     public String userPage(Model model, Principal principal) {
         User user = userService.findByUsername(principal.getName());
