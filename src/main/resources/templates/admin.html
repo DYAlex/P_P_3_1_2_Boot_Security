@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <link href="/style.css" rel="stylesheet">
+    <title>Spring Security Example</title>
+</head>
+<body>
+<header class="flexible spaced">
+    <h1>Admin page</h1>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" class="button button_danger" value="Log out"/>
+    </form>
+</header>
+
+<section>
+    <h3>Users</h3>
+    <button class="button button_action" onclick="window.location.href = '/admin/new';">Add new user</button>
+    <br />
+    <br />
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Lastname</th>
+                <th>Email</th>
+                <th>Username</th>
+                <th>Enabled</th>
+                <th>Role</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.lastName}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.enabled}"></td>
+                <td>
+                    <div th:each="role : ${user.roles}">
+                        <p th:text="${role.name}"></p>
+                    </div>
+                </td>
+                <td>
+                    <a th:href="@{/admin/show(id = ${user.id})}"><button class="button button_action">Details</button></a>
+                    <a th:href="@{/admin/edit(id = ${user.id})}"><button class="button button_warn">Edit</button></a>
+                    <form th:method="DELETE" th:action="@{/admin/delete(id = ${user.id})}">
+                        <input type="submit" value="Delete" class="button button_danger"/>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>
