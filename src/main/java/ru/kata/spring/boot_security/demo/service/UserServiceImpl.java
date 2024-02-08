@@ -2,7 +2,6 @@ package ru.kata.spring.boot_security.demo.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +21,6 @@ public class UserServiceImpl implements UserService {
 
     public User findById(Long id) {
         return userRepository.getById(id);
-    }
-
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
     }
 
     public List<User> findAll() {
@@ -60,15 +55,11 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User loadedUser = findByUsername(username);
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        User loadedUser = userRepository.findByUsername(username);
         if (loadedUser == null) {
             throw new UsernameNotFoundException("Unknown user: " + username);
         }
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(loadedUser.getUsername())
-                .password(loadedUser.getPassword())
-                .authorities(loadedUser.getRoles())
-                .build();
+        return loadedUser;
     }
 }
