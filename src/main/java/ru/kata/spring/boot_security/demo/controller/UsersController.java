@@ -21,14 +21,14 @@ public class UsersController {
         this.roleService = roleService;
     }
 
-    @GetMapping()
-    public String indexPage(Model model, Principal principal) {
-        if (principal != null) {
-//            User user = userService.findByUsername(principal.getName());
-                model.addAttribute("user", userService.loadUserByUsername(principal.getName()));
-        }
-        return "index";
-    }
+//    @GetMapping()
+//    public String indexPage(Model model, Principal principal) {
+//        if (principal != null) {
+////            User user = userService.findByUsername(principal.getName());
+//                model.addAttribute("user", userService.loadUserByUsername(principal.getName()));
+//        }
+//        return "index";
+//    }
 
     @GetMapping("/user")
     public String userPage(Model model, Principal principal) {

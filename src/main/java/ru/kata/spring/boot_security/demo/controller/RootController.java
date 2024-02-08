@@ -19,13 +19,13 @@ public class RootController {
     @GetMapping()
     public String indexPage(Model model, Principal principal) {
         if (principal != null) {
-            User user = userService.findByUsername(principal.getName());
-            if (user != null) {
-                model.addAttribute("user", user);
-            }
+//            User user = userService.findByUsername(principal.getName());
+            model.addAttribute("user", userService.loadUserByUsername(principal.getName()));
+
         }
         return "index";
     }
+
     @GetMapping("/login")
     public String loginPage() {
         return "login";
