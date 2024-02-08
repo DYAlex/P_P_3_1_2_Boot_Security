@@ -42,28 +42,29 @@ public class User implements UserDetails {
     @Fetch(FetchMode.JOIN)
     private Set<Role> roles;
 
-    private boolean accountNonExpired;
+    private boolean accountNonExpired = true;
 
-    private boolean accountNonLocked;
+    private boolean accountNonLocked = true;
 
-    private boolean credentialsNonExpired;
-    private boolean enabled;
+    private boolean credentialsNonExpired = true;
+    private boolean enabled = true;
 
-    public User(String name, String lastName, String email, String username, String password, Set<Role> roles) {
+    public User(String name, String lastName, Byte age, String email, String username, String password, Set<Role> roles) {
         this.name = name;
         this.lastName = lastName;
+        this.age = age;
         this.email = email;
         this.username = username;
         this.password = password;
         this.roles = roles;
-        this.accountNonExpired = true;
-        this.accountNonLocked = true;
-        this.credentialsNonExpired = true;
-        this.enabled = true;
+//        this.accountNonExpired = true;
+//        this.accountNonLocked = true;
+//        this.credentialsNonExpired = true;
+//        this.enabled = true;
     }
 
-    public User(String name, String lastName, String email, String username, String password, boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled, Set<Role> roles) {
-        this(name, lastName, email, username, password, roles);
+    public User(String name, String lastName, Byte age, String email, String username, String password, boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled, Set<Role> roles) {
+        this(name, lastName, age, email, username, password, roles);
         this.accountNonExpired = accountNonExpired;
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;

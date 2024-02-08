@@ -47,8 +47,8 @@ public class AppInit {
         allRoles.add(roleService.findByName(roleAdmin));
         allRoles.add(roleService.findByName(roleUser));
 
-        userService.saveUser(new User("Admin", "Adminov", "admin@admin.ru", "admin@admin.ru", adminPassword, adminRole));
-        userService.saveUser(new User("User", "Userov", "user@user.ru", "user@user.ru", userPassword, userRole));
-        userService.saveUser(new User("All", "Allin", "all@all.ru", "all@all.ru", allPassword, allRoles));
+        userService.saveUser(new User("Admin", "Adminov", (byte) 21, "admin@admin.ru", "admin@admin.ru", adminPassword, adminRole));
+        userService.saveUser(new User("User", "Userov", (byte) 45, "user@user.ru", "user@user.ru", userPassword, userRole));
+        userService.saveUser(new User("All", "Allin", (byte) 33, "all@all.ru", "all@all.ru", allPassword, allRoles));
     }
 }
