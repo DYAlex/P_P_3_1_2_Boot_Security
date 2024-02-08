@@ -22,5 +22,13 @@ public class RootController {
         return "index";
     }
 
-    // TODO: Add login and logout mappings
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
+
+    @GetMapping("/logout")
+    public String logoutPage() {
+        return "login";
+    }
 }
