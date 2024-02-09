@@ -28,8 +28,6 @@ public class User implements UserDetails {
 
     private byte age;
 
-    private String email;
-
     @Column(unique = true)
     private String username;
 
@@ -49,11 +47,10 @@ public class User implements UserDetails {
     private boolean credentialsNonExpired = true;
     private boolean enabled = true;
 
-    public User(String name, String lastName, Byte age, String email, String username, String password, Set<Role> roles) {
+    public User(String name, String lastName, Byte age, String username, String password, Set<Role> roles) {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
-        this.email = email;
         this.username = username;
         this.password = password;
         this.roles = roles;
@@ -63,8 +60,8 @@ public class User implements UserDetails {
 //        this.enabled = true;
     }
 
-    public User(String name, String lastName, Byte age, String email, String username, String password, boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled, Set<Role> roles) {
-        this(name, lastName, age, email, username, password, roles);
+    public User(String name, String lastName, Byte age, String username, String password, boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled, Set<Role> roles) {
+        this(name, lastName, age, username, password, roles);
         this.accountNonExpired = accountNonExpired;
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;

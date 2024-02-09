@@ -26,8 +26,8 @@ public class AppInit {
 
     @PostConstruct
     public void initializedDataBase() {
-        String roleAdmin = "ROLE_ADMIN";
-        String roleUser = "ROLE_USER";
+        String roleAdmin = "ADMIN";
+        String roleUser = "USER";
         Set<Role> adminRole = new HashSet<>();
         Set<Role> userRole = new HashSet<>();
         Set<Role> allRoles = new HashSet<>();
@@ -47,8 +47,8 @@ public class AppInit {
         allRoles.add(roleService.findByName(roleAdmin));
         allRoles.add(roleService.findByName(roleUser));
 
-        userService.saveUser(new User("Admin", "Adminov", (byte) 21, "admin@admin.ru", "admin@admin.ru", adminPassword, adminRole));
-        userService.saveUser(new User("User", "Userov", (byte) 45, "user@user.ru", "user@user.ru", userPassword, userRole));
-        userService.saveUser(new User("All", "Allin", (byte) 33, "all@all.ru", "all@all.ru", allPassword, allRoles));
+        userService.saveUser(new User("Admin", "Adminov", (byte) 21, "admin@admin.ru", adminPassword, adminRole));
+        userService.saveUser(new User("User", "Userov", (byte) 45, "user@user.ru", userPassword, userRole));
+        userService.saveUser(new User("All", "Allin", (byte) 33, "all@all.ru", allPassword, allRoles));
     }
 }
