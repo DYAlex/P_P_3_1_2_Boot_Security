@@ -16,7 +16,7 @@
 <!--                Invalid username and password.</div>-->
 <!--            <div th:if="${param.logout != null}">-->
 <!--                You have been logged out.</div>-->
-            <form class="form-signin" novalidate th:action="@{/login}" method="post">
+            <form class="form-signin" th:action="@{/login}" method="post">
                 <h1 class="h3 mb-3 font-weight-bolder">Please sign in</h1>
                 <div class="form-group">
                     <label for="username" class="sr-only">Email</label>
