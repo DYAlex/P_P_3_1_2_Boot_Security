@@ -1,42 +1,98 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="en">
 <head>
-    <link href="/style.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"
+            defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"
+            defer></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"
+            defer></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://bootstrap-4.ru/docs/4.3.1/examples/dashboard/dashboard.css"
+          crossorigin="anonymous">
     <title>User Page</title>
 </head>
 <body>
-    <header class="flexible spaced">
-        <h1>Detailed user page</h1>
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" class="button button_danger" value="Log out"/>
-        </form>
-    </header>
-    <section>
-        <div><a href="/"><button class="button button_warn">Go to main page</button></a></div>
-        <div class="flexible">
-            <p class="bold">ID:</p>
-            <p th:text="${user.id}">VALUE</p>
-        </div>
-        <div class="flexible">
-            <p class="bold">Name:</p>
-            <p th:text="${user.name}">VALUE</p>
-        </div>
-        <div class="flexible">
-            <p class="bold">Last name:</p>
-            <p th:text="${user.lastName}">VALUE</p>
-        </div>
-        <div class="flexible">
-            <p class="bold">Username:</p>
-            <p th:text="${user.username}">VALUE</p>
-        </div>
-        <div class="flexible">
-            <p class="bold">Enabled:</p>
-            <p th:text="${user.enabled}">VALUE</p>
-        </div>
-        <div class="flexible">
-            <p class="bold">Roles:</p>
-            <p th:each="role : ${user.roles}"><span th:text="|${role.name}, |"></span></p>
-        </div>
-    </section>
+<!-- Top navbar with current username and roles and logout link -->
+<header style="height: 5vh;">
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0">
+            <span class="navbar-brand col-sm-3 col-md-2 mr-0">
+                <span th:text="${user.username}" class="font-weight-bold">VALUE</span>
+                <span class="font-weight-light"> with roles: </span>
+                <span th:each="role : ${user.roles}">
+                    <span th:text="${role.name} + '&nbsp'" class="font-weight-light">ROLE</span>
+                </span>
+            </span>
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="#" th:href="@{/logout}">Logout</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container-fluid" style="height: 100vh;">
+    <div class="row h-100">
+        <!-- Sidebar with switching between Admin panel and user page -->
+        <nav class="col-md-3 col-xl-2 d-none d-md-block sidebar px-0 mt-3">
+            <div class="sidebar-sticky">
+                <div class="nav flex-column nav-pills">
+                    <a class="nav-item nav-link px-4" href="/admin" th:if="${user.roleNames.contains('ADMIN')}">
+                        Admin <span class="sr-only">(current)</span>
+                    </a>
+                    <a class="nav-item nav-link px-4 active" href="/user">
+                        User
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- User info table view -->
+        <main role="main" class="col-md-9 col-xl-10 ml-sm-auto col-lg-10 px-4 bg-light">
+            <h1 class="h2 my-3">User information-page</h1>
+            <div class="card" id="users_table"
+                 aria-labelledby="user_table-view">
+                <h2 class="h5 card-header">About user</h2>
+                <div class="table m-0 p-3 border-top" style="overflow-x: auto">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Age</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                        </tr>
+                        </thead>
+                        <tbody class="">
+                        <tr>
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.name}"></td>
+                            <td th:text="${user.lastName}"></td>
+                            <td th:text="${user.age}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td>
+                                    <span th:each="role : ${user.roles}">
+                                        <span th:text="${role.name} + '&nbsp'"></span>
+                                    </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
 </body>
 </html>
