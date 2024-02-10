@@ -1,8 +1,6 @@
 package ru.kata.spring.boot_security.demo.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -31,13 +29,11 @@ public class AppInit {
         Set<Role> adminRole = new HashSet<>();
         Set<Role> userRole = new HashSet<>();
         Set<Role> allRoles = new HashSet<>();
-        // the hashed password was calculated using the following code
-        // the hash should be done up front, so malicious users cannot discover the
-        // password
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-        String adminPassword = encoder.encode("admin");
-        String userPassword = encoder.encode("user");
-        String allPassword = encoder.encode("all");
+
+        String adminPassword = "admin";
+        String userPassword = "user";
+        String allPassword = "all";
+
 
         roleService.addRole(new Role(roleAdmin));
         roleService.addRole(new Role(roleUser));
