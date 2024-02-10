@@ -2,7 +2,9 @@ package ru.kata.spring.boot_security.demo.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -13,10 +15,12 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User findById(Long id) {
@@ -29,6 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public void saveUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -40,12 +45,11 @@ public class UserServiceImpl implements UserService {
         user.setLastName(updatedUser.getLastName());
         user.setUsername(updatedUser.getUsername());
         user.setRoles(updatedUser.getRoles());
-        user.setEnabled(updatedUser.isEnabled());
-        user.setAccountNonExpired(updatedUser.isAccountNonExpired());
-        user.setAccountNonLocked(updatedUser.isAccountNonLocked());
-        user.setCredentialsNonExpired(updatedUser.isCredentialsNonExpired());
+        if (!(updatedUser.getPassword().isEmpty())) {
+            user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
 
-        saveUser(user);
+        userRepository.save(user);
     }
 
 
