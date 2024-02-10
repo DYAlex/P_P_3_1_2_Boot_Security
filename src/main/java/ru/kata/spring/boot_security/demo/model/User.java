@@ -9,7 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -54,10 +56,6 @@ public class User implements UserDetails {
         this.username = username;
         this.password = password;
         this.roles = roles;
-//        this.accountNonExpired = true;
-//        this.accountNonLocked = true;
-//        this.credentialsNonExpired = true;
-//        this.enabled = true;
     }
 
     public User(String name, String lastName, Byte age, String username, String password, boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled, Set<Role> roles) {
@@ -70,5 +68,9 @@ public class User implements UserDetails {
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
+    }
+
+    public List<String> getRoleNames() {
+        return getRoles().stream().map(Role::getName).collect(Collectors.toList());
     }
 }
