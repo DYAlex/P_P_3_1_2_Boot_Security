@@ -1,7 +1,6 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -32,16 +31,8 @@ public class AdminController {
         return "admin";
     }
 
-//    @GetMapping("/show")
-//    public String show(@RequestParam("id") long id, Model model) {
-//        model.addAttribute("user", userService.findById(id));
-//        return "/admin/show";
-//    }
-
     @PutMapping("/edit{id}")
     public String editUser(@ModelAttribute("user") User user) {
-        String pass = user.getPassword();
-        System.err.println("Password is: " + pass + " isEmpty(): " + pass.isEmpty() + " isBlanc(): " + pass.isBlank() + " == null: " + (pass == null));
         userService.updateUser(user.getId(), user);
         return "redirect:/admin";
     }
