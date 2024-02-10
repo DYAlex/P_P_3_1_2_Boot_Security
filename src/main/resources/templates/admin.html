@@ -19,9 +19,9 @@
 <header style="height: 5vh;">
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0" >
         <span class="navbar-brand col-sm-3 col-md-2 mr-0">
-            <span th:text="${currentUser.username}" class="font-weight-bold">VALUE</span>
+            <span th:text="${principal.username}" class="font-weight-bold">VALUE</span>
             <span class="font-weight-light"> with roles: </span>
-            <span th:each="role : ${currentUser.roles}">
+            <span th:each="role : ${principal.roles}">
                 <span th:text="${role.name} + '&nbsp'" class="font-weight-light">ROLE</span>
             </span>
         </span>
