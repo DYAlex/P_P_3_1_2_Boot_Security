@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
@@ -15,6 +17,8 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty
+    @Size(min = 4, max = 32, message = "Role name should be between 4 and 32 characters long")
     private String name;
 
     public Role(String name) {
