@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +18,7 @@ public class Role implements GrantedAuthority {
 
     private String name;
 
+    @NotEmpty
     public Role(String name) {
         this.name = name;
     }

@@ -78,3 +78,8 @@ tr:nth-child(even) {
 .separator_vertical {
     margin: 0 1rem;
 }
+
+.error {
+    color: crimson;
+    margin-left: 1rem;
+}
