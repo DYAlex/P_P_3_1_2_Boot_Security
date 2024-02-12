@@ -12,10 +12,10 @@
 </head>
 <body>
     <div class="container col-md-3 mt-5">
-<!--            <div th:if="${param.error != null}">-->
-<!--                Invalid username and password.</div>-->
-<!--            <div th:if="${param.logout != null}">-->
-<!--                You have been logged out.</div>-->
+            <div th:if="${param.error != null}">
+                Invalid username or password.</div>
+            <div th:if="${param.logout != null}">
+                You have been logged out.</div>
             <form class="form-signin" th:action="@{/login}" method="post">
                 <h1 class="h3 mb-3 font-weight-bolder">Please sign in</h1>
                 <div class="form-group">
