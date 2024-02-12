@@ -40,20 +40,13 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/admin#new_user")
-    public String addNewUserForm(Model model) {
-        System.err.println("Called /admin#new_user GetMapping");
-        model.addAttribute("newUser", new User());
-        model.addAttribute("roles", roleService.getAllRoles());
-        return "/admid#new_user";
-    }
     @PostMapping()
     public String addUserToDb(@ModelAttribute("newUser") @Valid User user, BindingResult bindingResult) {
         System.err.println("Called addUserToDb PostMapping");
         if (bindingResult.hasErrors()) {
             System.err.println("User not valid");
             System.err.println(bindingResult);
-            return "/admin#new_user";
+            return "redirect:/admin";
         }
         userService.saveUser(user);
         return "redirect:/admin";
