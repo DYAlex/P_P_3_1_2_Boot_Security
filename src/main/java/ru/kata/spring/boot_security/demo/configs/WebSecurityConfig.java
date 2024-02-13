@@ -32,9 +32,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/admin", "/admin/*").hasAuthority("ADMIN")
+                .antMatchers("/", "/index", "/api/*").permitAll()
+                .antMatchers("/admin").hasAuthority("ADMIN")
                 .antMatchers("/user").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/", "/index").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -43,6 +43,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                 .and()
                 .logout().permitAll();
+//        Use this to disable web security for testing
+//                .csrf().disable()
+//                .authorizeRequests().antMatchers("/**").permitAll();
     }
 
     @Bean
