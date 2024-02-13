@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -22,17 +23,27 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "Name should not be empty")
+    @Size(min = 3, max = 64, message = "Name should be between 3 and 64 characters long")
     @Column(name = "name")
     private String name;
 
+    @NotEmpty(message = "Last name should not be empty")
+    @Size(min = 2, max = 64, message = "Last name should be between 2 and 64 characters long")
     @Column(name = "last_name")
     private String lastName;
 
+    @Min(value = 1, message = "Age should greater than 0")
+    @Max(value = 127, message = "Age should be less than 128")
     private byte age;
 
+    @NotEmpty
+    @Email(message = "Email should be in format: name@subdomain.domain")
     @Column(unique = true)
     private String username;
 
+    @NotEmpty
+    @Size(min = 4, max = 64, message = "Password should be between 4 and 64 characters long")
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -40,6 +51,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     @Fetch(FetchMode.JOIN)
+    @NotEmpty
     private Set<Role> roles;
 
     private boolean accountNonExpired = true;
