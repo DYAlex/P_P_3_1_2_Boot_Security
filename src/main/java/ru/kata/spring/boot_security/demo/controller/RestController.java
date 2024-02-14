@@ -9,7 +9,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import ru.kata.spring.boot_security.demo.dto.UserDto;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.util.UserErrorResponse;
 import ru.kata.spring.boot_security.demo.util.UserNotCreatedException;
@@ -21,27 +23,34 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @org.springframework.web.bind.annotation.RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1")
 public class RestController {
     private final UserService userService;
+    private final RoleService roleService;
     private final ModelMapper modelMapper;
     @Autowired
-    public RestController(UserService userService, ModelMapper modelMapper) {
+    public RestController(UserService userService, RoleService roleService, ModelMapper modelMapper) {
         this.userService = userService;
+        this.roleService = roleService;
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping()
+    @GetMapping("/roles")
+    public List<Role> getAllRoles() {
+        return roleService.getAllRoles();
+    }
+
+    @GetMapping("/users")
     public List<UserDto> getAllUsers() {
         return userService.findAll().stream().map(this::convertToUserDto).collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     public UserDto getUserById(@PathVariable long id) {
         return convertToUserDto(userService.findById(id));
     }
 
-    @PostMapping()
+    @PostMapping("/users")
     public ResponseEntity<HttpStatus> addNewUser(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             bindingResult.getFieldErrors().forEach(System.err::println);
@@ -59,7 +68,7 @@ public class RestController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PutMapping("/edit{id}")
+    @PutMapping("/users/edit/{id}")
     public ResponseEntity<HttpStatus> editUser(@PathVariable long id, @RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             bindingResult.getFieldErrors().forEach(System.err::println);
@@ -77,7 +86,7 @@ public class RestController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/users/delete/{id}")
     public void deleteUser(@PathVariable long id) {
         userService.deleteById(id);
     }
