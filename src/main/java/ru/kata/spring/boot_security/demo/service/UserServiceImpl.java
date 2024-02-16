@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
+import ru.kata.spring.boot_security.demo.util.UserNotCreatedException;
 import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 
 import java.util.List;
@@ -34,6 +35,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public void saveUser(User user) {
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+            throw new UserNotCreatedException("Username is not available");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
