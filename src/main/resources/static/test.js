@@ -49,6 +49,49 @@ function getAllUsers() {
         .catch(err => console.error(err))
 }
 
+// Add new user
+function addNewUser() {
+    console.log("Add newUser started")
+    let newUserForm = $('#new_user-form')[0]
+    fillRoles(newUserForm, []);
+    newUserForm.addEventListener("submit", (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        let newUser = JSON.stringify({
+            name: $(`[name="name"]`, newUserForm).val(),
+            lastName: $(`[name="lastName"]`, newUserForm).val(),
+            age: $(`[name="age"]`, newUserForm).val(),
+            username: $(`[name="username"]`, newUserForm).val(),
+            password: $(`[name="password"]`, newUserForm).val(),
+            roles: Array.from($(`[name="roles"]`, newUserForm)[0].options)
+                .filter(o => o.selected)
+                .map(o => roleList[o.value - 1])
+        })
+        fetch(`${baseUrl}/users`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: newUser
+        })
+            .then(r => {
+                if (r.ok) {
+                    newUserForm.reset()
+                    $('#users_table-tab')[0].click()
+                } else {
+                    r.json().then(r => {
+                        console.error(`Request failed at ${new Date(r.timestamp).toLocaleString()}: ${r.message} `)
+                        alert(r.message)
+                    })
+                }
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    })
+}
+
 // Show edit user modal
 function showEditModal(id) {
     console.log("Show edit user modal started")
@@ -164,8 +207,11 @@ function json(response) {
 }
 
 function fillRoles(form, userRoles) {
+    console.log(`Form: ${form}`)
     userRoles = userRoles.map(r => r.id)
+    console.log(`userRoles: ${userRoles}`)
     const select = $(`[name="roles"]`, form).attr('size', roleList.length).empty()
+    console.log(`Select: ${select}`)
     roleList.forEach(role => {
         select.append(userRoles.indexOf(role.id) >= 0
             ? `<option value="${role.id}" selected >
