@@ -58,9 +58,6 @@ function showEditModal(id) {
     editForm.addEventListener('submit', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        // console.log(Array.from($(`[name="roles"]`, editForm)[0].options).reduce(role, o => {
-        //     return o.selected ? role.push(roleList[o - 1]) : role
-        // }, role))
         let editedUser = JSON.stringify({
             id: $(`[name="id"]`, editForm).val(),
             name: $(`[name="name"]`, editForm).val(),
@@ -68,8 +65,9 @@ function showEditModal(id) {
             age: $(`[name="age"]`, editForm).val(),
             username: $(`[name="username"]`, editForm).val(),
             password: $(`[name="password"]`, editForm).val() ? $(`[name="password"]`, editForm).val() : selectedUserPassword,
-            // roles: Array.from($(`[name="roles"]`, editForm)[0].options).filter(o => o.selected)
-            roles: getRole(editForm)
+            roles: Array.from($(`[name="roles"]`, editForm)[0].options)
+                .filter(o => o.selected)
+                .map(o => roleList[o.value - 1])
         })
         fetch(`${baseUrl}/users/edit/${id}`, {
             method: 'PUT',
@@ -79,15 +77,18 @@ function showEditModal(id) {
             body: editedUser
         })
             .then(r => {
-                selectedUserPassword = ""
-                editModal.modal('toggle')
-                $('#users_table-tab')[0].click()
+                if (r.ok) {
+                    selectedUserPassword = ""
+                    editModal.modal('toggle')
+                    $('#users_table-tab')[0].click()
+                } else {
+                    r.json().then(r => {
+                        console.error(`Request failed at ${new Date(r.timestamp).toLocaleString()}: ${r.message} `)
+                        alert(r.message)
+                    })
+                }
             })
             .catch(error => {
-                // error.json().then(r => {
-                //     console.error(`Request failed at ${new Date(r.timestamp).toLocaleString()}: ${r.message} `)
-                // })
-
                 console.error(error)
             })
     })
@@ -104,16 +105,20 @@ function showDeleteModal(id) {
         e.stopPropagation()
         fetch(`${baseUrl}/users/delete/${id}`, {
             method: 'DELETE'
-        }).then(status).then(json)
+        }).then(status)
             .then(r => {
-                selectedUserPassword = ""
-                deleteModal.modal('toggle')
-                $('#users_table-tab')[0].click()
+                if (r.ok) {
+                    selectedUserPassword = ""
+                    deleteModal.modal('toggle')
+                    $('#users_table-tab')[0].click()
+                } else {
+                    r.json().then(r => {
+                        console.error(`Request failed at ${new Date(r.timestamp).toLocaleString()}: ${r.message} `)
+                        alert(r.message)
+                    })
+                }
             })
             .catch(function (error) {
-                // error.json().then(r => {
-                //     console.error(`Request failed at ${new Date(r.timestamp).toLocaleString()}: ${r.message} `)
-                // })
                 console.error(error)
             })
     })
@@ -170,17 +175,6 @@ function fillRoles(form, userRoles) {
                                  ${role.name}
                             </option>`)
     })
-}
-
-function getRole(form) {
-    let role = []
-    let options = $(`[name="roles"]`, form)[0].options
-    for (let i = 0; i < options.length; i++) {
-        if (options[i].selected) {
-            role.push(roleList[i])
-        }
-    }
-    return role
 }
 
 // Test event of page reloading
