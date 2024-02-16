@@ -53,8 +53,6 @@ public class RestController {
     @PostMapping("/users")
     public ResponseEntity<HttpStatus> addNewUser(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            bindingResult.getFieldErrors().forEach(System.err::println);
-
             StringBuilder errorMsg = new StringBuilder();
             List<FieldError> errors = bindingResult.getFieldErrors();
             for (FieldError error : errors) {
@@ -71,8 +69,6 @@ public class RestController {
     @PutMapping("/users/edit/{id}")
     public ResponseEntity<HttpStatus> editUser(@PathVariable long id, @RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            bindingResult.getFieldErrors().forEach(System.err::println);
-
             StringBuilder errorMsg = new StringBuilder();
             List<FieldError> errors = bindingResult.getFieldErrors();
             for (FieldError error : errors) {
