@@ -1,11 +1,9 @@
-const baseUrl = 'http://localhost:8080/api/v1';
+const baseUrl = 'http://localhost:8080/api/v1'
 const roleList = []
-let csrfToken = ""
 let selectedUserPassword = ""
 
 // Get roles list
 $(document).ready(function () {
-    console.log("Document ready")
     getAllUsers()
     fetch(`${baseUrl}/roles`)
         .then(response => response.json())
@@ -18,14 +16,13 @@ $(document).ready(function () {
 
 // fetch users from api and append to table body
 function getAllUsers() {
-    console.log("getAllUsers started")
-    let usersTable = $('#users_table-body')
+    const usersTable = $('#users_table-body')
     fetch(`${baseUrl}/users`)
         .then(response => response.json())
         .then(users => {
             usersTable.empty()
             users.forEach(user => {
-                let row = `$(
+                const row = `$(
                     <tr>
                         <td>${user.id}</td>
                         <td>${user.name}</td>
@@ -51,14 +48,15 @@ function getAllUsers() {
 
 // Add new user
 function addNewUser() {
-    console.log("Add newUser started")
-    let newUserForm = $('#new_user-form')[0]
+    const newUserForm = $('#new_user-form')[0]
     fillRoles(newUserForm, []);
     newUserForm.addEventListener("submit", (e) => {
         e.preventDefault()
         e.stopPropagation()
 
-        let newUser = JSON.stringify({
+        const csrfToken = $(`[name="_csrf"]`, newUserForm).val()
+
+        const newUser = JSON.stringify({
             name: $(`[name="name"]`, newUserForm).val(),
             lastName: $(`[name="lastName"]`, newUserForm).val(),
             age: $(`[name="age"]`, newUserForm).val(),
@@ -72,6 +70,7 @@ function addNewUser() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken
             },
             body: newUser
         })
@@ -94,14 +93,14 @@ function addNewUser() {
 
 // Show edit user modal
 function showEditModal(id) {
-    console.log("Show edit user modal started")
     const editModal = $('#edit_user-modal')
     const editForm = $('#edit_user-form')[0]
     showModal(editForm, editModal, id)
     editForm.addEventListener('submit', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        let editedUser = JSON.stringify({
+        const csrfToken = $(`[name="_csrf"]`, editForm).val()
+        const editedUser = JSON.stringify({
             id: $(`[name="id"]`, editForm).val(),
             name: $(`[name="name"]`, editForm).val(),
             lastName: $(`[name="lastName"]`, editForm).val(),
@@ -116,6 +115,7 @@ function showEditModal(id) {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken
             },
             body: editedUser
         })
@@ -139,15 +139,18 @@ function showEditModal(id) {
 
 // Delete user Modal
 function showDeleteModal(id) {
-    console.log("Delete user modal started")
     const deleteModal = $('#delete_user-modal')
     const deleteForm = $('#delete_user-form')[0]
     showModal(deleteForm, deleteModal, id)
     deleteForm.addEventListener('submit', (e) => {
         e.preventDefault()
         e.stopPropagation()
+        const csrfToken = $(`[name="_csrf"]`, deleteForm).val()
         fetch(`${baseUrl}/users/delete/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-Token': csrfToken
+            }
         }).then(status)
             .then(r => {
                 if (r.ok) {
@@ -169,7 +172,6 @@ function showDeleteModal(id) {
 
 // Helper functions
 function showModal(form, modal, id) {
-    console.log("Show modal started")
     modal.show()
     requestUserJSONResult(id)
         .then(user => {
@@ -207,11 +209,8 @@ function json(response) {
 }
 
 function fillRoles(form, userRoles) {
-    console.log(`Form: ${form}`)
     userRoles = userRoles.map(r => r.id)
-    console.log(`userRoles: ${userRoles}`)
     const select = $(`[name="roles"]`, form).attr('size', roleList.length).empty()
-    console.log(`Select: ${select}`)
     roleList.forEach(role => {
         select.append(userRoles.indexOf(role.id) >= 0
             ? `<option value="${role.id}" selected >
