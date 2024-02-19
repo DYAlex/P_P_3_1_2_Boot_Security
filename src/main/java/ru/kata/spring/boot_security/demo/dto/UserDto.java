@@ -25,7 +25,7 @@ public class UserDto {
     private int age;
 
     @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.+.[a-zA-Z]{2,4}$", message = "Username should be in format: name@subdomain.domain")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,4}$", message = "Email should be in format: name@subdomain.domain")
     private String username;
 
     @NotEmpty

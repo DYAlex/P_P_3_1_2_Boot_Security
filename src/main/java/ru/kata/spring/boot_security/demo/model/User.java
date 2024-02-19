@@ -38,7 +38,7 @@ public class User implements UserDetails {
     private int age;
 
     @NotEmpty
-    @Email(message = "Email should be in format: name@subdomain.domain")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,4}$", message = "Email should be in format: name@subdomain.domain")
     @Column(unique = true)
     private String username;
 
