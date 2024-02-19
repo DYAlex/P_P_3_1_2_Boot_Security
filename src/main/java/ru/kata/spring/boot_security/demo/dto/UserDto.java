@@ -20,9 +20,9 @@ public class UserDto {
     @Size(min = 2, max = 64, message = "Last name should be between 2 and 64 characters long")
     private String lastName;
 
-    @Min(value = 1, message = "Age should greater than 0")
+    @Min(value = 1, message = "Age should be greater than 0")
     @Max(value = 127, message = "Age should be less than 128")
-    private byte age;
+    private int age;
 
     @NotEmpty
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.+.[a-zA-Z]{2,4}$", message = "Username should be in format: name@subdomain.domain")
